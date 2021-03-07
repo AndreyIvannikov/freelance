@@ -1,7 +1,11 @@
 <template>
   <the-navbar></the-navbar>
   <div class="container with-nav">
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 
@@ -16,7 +20,6 @@ export default {
   },
   setup(props) {
     const store = useStore();
-    store.dispatch("getTaskInDatabase");
 
     return {};
   }

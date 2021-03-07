@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory, RouterLink } from 'vue-router'
 import Tasks from '../views/Tasks.vue'
-import New from '../views/New.vue'
 import Task from '../views/Task.vue'
-import notFound from '../components/404.vue'
+import notFound from '../views/404.vue'
+
+const New = () => import('../views/New.vue')
 
 const routes = [
   {

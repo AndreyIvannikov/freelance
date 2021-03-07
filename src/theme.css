@@ -433,3 +433,6 @@ h3 {
 .text-white.center {
     text-align: center;
 }
+.loader{
+    margin: 0 auto;
+}

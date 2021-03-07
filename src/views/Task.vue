@@ -1,5 +1,5 @@
 <template>
-  <h2 v-if="loader" class="card">загрузка...</h2>
+  <AppLoader v-if="loader" />
   <h2 v-if="errorMessage" class="card">{{ errorMessage }}</h2>
 
   <div class="card" v-if="task">
@@ -39,19 +39,21 @@
 
 <script>
 import AppStatus from "../components/AppStatus";
+import AppLoader from "../components/AppLoader";
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 export default {
-  components: { AppStatus },
+  components: { AppStatus,AppLoader },
   props: ["id"],
 
   setup(props) {
     const store = useStore();
     const router = useRouter();
     const id = props.id;
-    const task = computed(() => store.getters.getTask(id));
+    const task = computed(() => store.getters.getTask)
+    const loader = ref(true)
     // if (!task.value) router.push(`/${id}`);
 
     const changeStatusInState = (status, type, activeStatus) => {
@@ -62,9 +64,10 @@ export default {
       store.dispatch('saveStatusInDatabase',id)
     }
 
-    const loader = computed(() => {
-      return store.getters.loader;
-    });
+    onMounted(async ()=>{
+      await store.dispatch('getTask',id)
+      loader.value = await false
+    })
 
     const errorMessage = computed(() => {
       return store.getters.errorMessage;
@@ -73,7 +76,7 @@ export default {
     return {
       task,
       changeStatusInState,
-      loader,
+      loader:computed(() => loader.value),
       errorMessage,
       saveStatusInDatabase
     };
